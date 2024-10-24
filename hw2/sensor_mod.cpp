@@ -17,6 +17,10 @@ void init_sensor() {
     delay(200);
 }
 
+unsigned int getSV(int num) {
+  return sensorValues[num];
+}
+
 int getPosition() {
     Serial.print(sensorValues[0]);Serial.print(",");
     Serial.print(sensorValues[1]);Serial.print(",");

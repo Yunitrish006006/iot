@@ -5,6 +5,12 @@
 #define right_back A3
 #define right_foward A2
 #include "Arduino.h"
+#include "sensor_mod.h"
+
+unsigned int last_proportional = 0;
+long integral = 0;
+int Distance = 0;
+
 void init_motor() {
   pinMode(LPWM, OUTPUT);
   pinMode(RPWM, OUTPUT);
@@ -56,7 +62,14 @@ void stop() {
   left_speed_set(0);
   right_speed_set(0);
 }
-void followLine(int power_difference,int maximum) {
+void followLine(int proportional,int maximum) {
+  int derivative = proportional - last_proportional;
+  integral += proportional;
+  last_proportional = proportional;
+  int power_difference = proportional/20 + integral/10000 + derivative*10;
+  const int maximum =150;
+  Distance = Distance_test();//get distance of obstacles
+
   if (power_difference > maximum)
     power_difference = maximum;
   if (power_difference < - maximum)

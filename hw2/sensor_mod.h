@@ -6,4 +6,5 @@ int getPosition();
 bool isLineEnd();
 bool isOnLine();
 bool isGettingInLine();
+unsigned int getSV();
 #endif

@@ -10,9 +10,9 @@ void setup() {
   init_motor();//initialize motor
   Serial.begin(9600);
 }
+/*
 int turn = 0;//counter of turn time 
 void loop() {
-  // /*
   unsigned int position = getPosition();
   int proportional = (int)position - 2000;
   int derivative = proportional - last_proportional;
@@ -24,13 +24,13 @@ void loop() {
   if (turn<2) {
     if (isOnLine()) {
       if(Distance < 15) {
-        left(80);
+        right(80);
         delay(100);
         forward(180);
         delay(380);
         stop();
         delay(100);
-        right(80);
+        left(80);
         delay(100);
         turn++;
       }
@@ -43,7 +43,7 @@ void loop() {
     }
     else if (isGettingInLine()) {// is stepping on line
       // stop();
-      // right(80);
+      // left(80);
       // delay(100);
       // turn++;
     }
@@ -55,5 +55,52 @@ void loop() {
   else if(turn >= 3) {
     stop();
   }
-  // */
+}
+*/
+const int maximum =150;
+void right_turn() {
+  left_speed_set(maximum-20);
+  right_speed_set(5);
+  while (true) {
+    if (getPosition()<500) {
+      forward(maximum);
+      forwardLeftTurn();
+      break;
+    }
+  }
+  
+}
+
+void forwardLeftTurn() {
+ while (true) {
+  if (getPosition() > 3500) {
+    break;
+  }
+ }  
+}
+
+void onLineFoward() {
+  unsigned int position = getPosition();
+  int proportional = (int)position - 2000;
+
+  int sum = 0;
+  for(int i=0;i<5;i++) {
+    sum+=getSV();
+  }
+  if(sum/5 <= 200) {
+    stop();
+  }
+  else {
+    followLine(proportional,maximum);
+  }
+}
+
+void loop() {
+  int distance = Distance_test();
+  if (distance < 20) {
+    right_turn();
+  }
+  else {
+    onLineFoward();
+  }
 }
