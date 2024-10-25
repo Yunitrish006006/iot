@@ -14,7 +14,7 @@ void init_sensor() {
         trs.calibrate();
     }
     Serial.println();
-    delay(200);
+    delay(500);
 }
 
 unsigned int getSV(int num) {

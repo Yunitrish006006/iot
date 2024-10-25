@@ -1,13 +1,10 @@
 #include "TRSensors.h"
 #include "motor_mod.h"
 #include "sensor_mod.h"
-unsigned int last_proportional = 0;
-long integral = 0;
-int Distance = 0;
-
+int maximum = 90;
 void setup() {
   init_sensor();//initialize sensor
-  init_motor();//initialize motor
+  init_motor(maximum);//initialize motor
   Serial.begin(9600);
 }
 /*
@@ -57,9 +54,9 @@ void loop() {
   }
 }
 */
-const int maximum =150;
+
 void right_turn() {
-  left_speed_set(maximum-20);
+  left_speed_set(maximum-10);
   right_speed_set(5);
   while (true) {
     if (getPosition()<500) {
@@ -68,7 +65,6 @@ void right_turn() {
       break;
     }
   }
-  
 }
 
 void forwardLeftTurn() {
@@ -85,19 +81,19 @@ void onLineFoward() {
 
   int sum = 0;
   for(int i=0;i<5;i++) {
-    sum+=getSV();
+    sum+=getSV(i);
   }
-  if(sum/5 <= 200) {
+  if(sum/5 <= 20) {
     stop();
   }
   else {
-    followLine(proportional,maximum);
+    followLine(proportional);
   }
 }
 
 void loop() {
   int distance = Distance_test();
-  if (distance < 20) {
+  if (distance < 15) {
     right_turn();
   }
   else {

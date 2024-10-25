@@ -11,7 +11,11 @@ unsigned int last_proportional = 0;
 long integral = 0;
 int Distance = 0;
 
-void init_motor() {
+
+int maximumSpeed = 255;
+
+void init_motor(int max) {
+  maximumSpeed = max;
   pinMode(LPWM, OUTPUT);
   pinMode(RPWM, OUTPUT);
   pinMode(left_foward, OUTPUT);
@@ -19,6 +23,7 @@ void init_motor() {
   pinMode(right_back, OUTPUT);
   pinMode(right_foward, OUTPUT);
 }
+
 void left_speed_set(int speed) {
   if (speed >= 0) {
     analogWrite(LPWM, speed);
@@ -62,24 +67,23 @@ void stop() {
   left_speed_set(0);
   right_speed_set(0);
 }
-void followLine(int proportional,int maximum) {
+void followLine(int proportional) {
   int derivative = proportional - last_proportional;
   integral += proportional;
   last_proportional = proportional;
   int power_difference = proportional/20 + integral/10000 + derivative*10;
-  const int maximum =150;
   Distance = Distance_test();//get distance of obstacles
 
-  if (power_difference > maximum)
-    power_difference = maximum;
-  if (power_difference < - maximum)
-    power_difference = - maximum;
+  if (power_difference > maximumSpeed)
+    power_difference = maximumSpeed;
+  if (power_difference < - maximumSpeed)
+    power_difference = - maximumSpeed;
   if (power_difference < 0) {
-    left_speed_set(maximum + power_difference);
-    right_speed_set(maximum);
+    left_speed_set(maximumSpeed + power_difference);
+    right_speed_set(maximumSpeed);
   }
   else {
-    left_speed_set(maximum);
-    right_speed_set(maximum + power_difference);
+    left_speed_set(maximumSpeed);
+    right_speed_set(maximumSpeed + power_difference);
   } 
 }
