@@ -1,6 +1,5 @@
 {
-    "sketch": "hw2/hw2.ino",
     "board": "arduino:avr:uno",
-    "port": "/dev/ttyACM0",
-    "programmer": "avrisp"
+    "programmer": "avrisp",
+    "port": "/dev/ttyACM0"
 }
